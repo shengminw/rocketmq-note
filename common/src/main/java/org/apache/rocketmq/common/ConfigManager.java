@@ -31,6 +31,7 @@ public abstract class ConfigManager {
         String fileName = null;
         try {
             fileName = this.configFilePath();
+            //指定文件名，读取后将内容按照字节进行读取为String格式
             String jsonString = MixAll.file2String(fileName);
 
             if (null == jsonString || jsonString.length() == 0) {

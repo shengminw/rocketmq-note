@@ -153,18 +153,22 @@ public class MixAll {
 
     public static void string2File(final String str, final String fileName) throws IOException {
 
+        //1. 将当前的内容存储存储为tmp文件
         String tmpFile = fileName + ".tmp";
         string2FileNotSafe(str, tmpFile);
 
+        //2. 读取现有的文件中的内容，并存储为bak文件
         String bakFile = fileName + ".bak";
         String prevContent = file2String(fileName);
         if (prevContent != null) {
             string2FileNotSafe(prevContent, bakFile);
         }
 
+        //3. 删除新文件
         File file = new File(fileName);
         file.delete();
 
+        //4. 最后写入新的文件
         file = new File(tmpFile);
         file.renameTo(new File(fileName));
     }

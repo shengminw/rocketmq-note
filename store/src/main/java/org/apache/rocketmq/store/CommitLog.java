@@ -90,6 +90,7 @@ public class CommitLog implements Swappable {
     public CommitLog(final DefaultMessageStore messageStore) {
         String storePath = messageStore.getMessageStoreConfig().getStorePathCommitLog();
         if (storePath.contains(MixAll.MULTI_PATH_SPLITTER)) {
+            //多路径的情况，CommitLog的日志文件会存储于多个文件
             this.mappedFileQueue = new MultiPathMappedFileQueue(messageStore.getMessageStoreConfig(),
                 messageStore.getMessageStoreConfig().getMappedFileSizeCommitLog(),
                 messageStore.getAllocateMappedFileService(), this::getFullStorePaths);

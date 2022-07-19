@@ -222,6 +222,7 @@ public class TopicConfigManager extends ConfigManager {
                             }
                         }
 
+                        //perm属性代表着权限的问题
                         if (PermName.isInherited(defaultTopicConfig.getPerm())) {
                             topicConfig = new TopicConfig(topic);
 
@@ -484,6 +485,7 @@ public class TopicConfigManager extends ConfigManager {
         long stateMachineVersion = brokerController.getMessageStore() != null ? brokerController.getMessageStore().getStateMachineVersion() : 0;
         dataVersion.nextVersion(stateMachineVersion);
 
+        //每次更新topic的时候的会进行持久化，同时还会生成.tmp(缓存当前) .bak文件(备份文件记录之前持久化的版本)
         this.persist(topicConfig.getTopicName(), topicConfig);
     }
 

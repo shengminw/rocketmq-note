@@ -24,6 +24,20 @@ import java.io.File;
 
 public class MessageStoreConfig {
 
+    /**
+     * 多文件目录的分割符号：MULTI_PATH_SPLITTER
+     *
+     * 这里单独对多文件目录做一个介绍
+     * 这个版本中，仅支持 CommitLog可以挂载在多个目录下（主要可以学习 MultiPathMappedFileQueue）。
+     * storePathRootDir只能保持单目录状态
+     * 即是：ConsumeQueue，IndexFile，元数据等文件保持单目录（这些的文件路径生成 BrokerPathConfigHelper, StorePathConfigHelper）
+     *
+     * 此时的挂载路径类似于：
+     * storePathRootDir=/rmqstore1
+     * storePathCommitLog=/rmqstore1/commitlog:/rmqstore2/commitlog
+     *
+     * 可以学习参考：https://github.com/apache/rocketmq/wiki/RIP-7-Multiple-Directories-Storage-Support
+     */
     public static final String MULTI_PATH_SPLITTER = System.getProperty("rocketmq.broker.multiPathSplitter", ",");
 
     //The root directory in which the log data is kept

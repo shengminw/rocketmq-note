@@ -685,6 +685,7 @@ public class BrokerController {
 
     public boolean initialize() throws CloneNotSupportedException {
 
+        //不抛出异常的话，即是没有找到文件，也是会返回true的
         boolean result = this.topicConfigManager.load();
         result = result && this.topicQueueMappingManager.load();
         result = result && this.consumerOffsetManager.load();

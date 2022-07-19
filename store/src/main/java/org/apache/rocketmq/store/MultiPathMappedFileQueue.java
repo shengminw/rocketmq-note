@@ -67,6 +67,7 @@ public class MultiPathMappedFileQueue extends MappedFileQueue {
         List<File> files = new ArrayList<>();
         for (String path : storePathSet) {
             File dir = new File(path);
+            //从每一个commitlog目录下获取file的列表
             File[] ls = dir.listFiles();
             if (ls != null) {
                 Collections.addAll(files, ls);
@@ -83,7 +84,6 @@ public class MultiPathMappedFileQueue extends MappedFileQueue {
         Set<String> readonlyPathSet = getReadonlyPaths();
         Set<String> fullStorePaths =
                 fullStorePathsSupplier == null ? Collections.emptySet() : fullStorePathsSupplier.get();
-
 
         HashSet<String> availableStorePath = new HashSet<>(storePath);
         //do not create file in readonly store path.
