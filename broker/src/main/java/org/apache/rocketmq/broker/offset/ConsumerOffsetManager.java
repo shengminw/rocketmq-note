@@ -35,6 +35,18 @@ import org.apache.rocketmq.logging.InternalLogger;
 import org.apache.rocketmq.logging.InternalLoggerFactory;
 import org.apache.rocketmq.remoting.protocol.RemotingSerializable;
 
+/**
+ * consumerOffset的时候没有持久化dataVersion的参量？
+ * consumerOffset的存储格式：
+ * {
+ *         "offsetTable":{
+ *                 "TEST_TOPIC@user_consumerGroup":{0:6,1:4,2:4,3:4
+ *                 },
+ *                 "%RETRY%wsm_consumerGroup@user_consumerGroup":{0:0
+ *                 }
+ *         }
+ * }
+ */
 public class ConsumerOffsetManager extends ConfigManager {
     private static final InternalLogger LOG = InternalLoggerFactory.getLogger(LoggerName.BROKER_LOGGER_NAME);
     public static final String TOPIC_GROUP_SEPARATOR = "@";

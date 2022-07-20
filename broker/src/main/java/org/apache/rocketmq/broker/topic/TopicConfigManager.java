@@ -51,6 +51,56 @@ import org.apache.rocketmq.logging.InternalLoggerFactory;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+/**
+ * topics.json存储格式：
+ * {
+ *         "dataVersion":{
+ *                 "counter":5,
+ *                 "timestamp":1658289099580
+ *         },
+ *         "topicConfigTable":{
+ *                 "SCHEDULE_TOPIC_XXXX":{
+ *                         "order":false,
+ *                         "perm":6,
+ *                         "readQueueNums":18,
+ *                         "topicFilterType":"SINGLE_TAG",
+ *                         "topicName":"SCHEDULE_TOPIC_XXXX",
+ *                         "topicSysFlag":0,
+ *                         "writeQueueNums":18
+ *                 },
+ *                 "SELF_TEST_TOPIC":{
+ *                         "order":false,
+ *                         "perm":6,
+ *                         "readQueueNums":1,
+ *                         "topicFilterType":"SINGLE_TAG",
+ *                         "topicName":"SELF_TEST_TOPIC",
+ *                         "topicSysFlag":0,
+ *                         "writeQueueNums":1
+ *                 },
+ *                 //自定义的topic
+ *                 "TEST_TOPIC":{
+ *                         "order":false,
+ *                         "perm":6,
+ *                         "readQueueNums":4,
+ *                         "topicFilterType":"SINGLE_TAG",
+ *                         "topicName":"TEST_TOPIC",
+ *                         "topicSysFlag":0,
+ *                         "writeQueueNums":4
+ *                 }
+ *                 //消费者组的重试队列
+ *                 "%RETRY%user_consumerGroup":{
+ *                         "order":false,
+ *                         "perm":6,
+ *                         "readQueueNums":1,
+ *                         "topicFilterType":"SINGLE_TAG",
+ *                         "topicName":"%RETRY%user_consumerGroup",
+ *                         "topicSysFlag":0,
+ *                         "writeQueueNums":1
+ *                 },
+ *                 ....很多
+*          }
+ * }
+ */
 public class TopicConfigManager extends ConfigManager {
     private static final InternalLogger log = InternalLoggerFactory.getLogger(LoggerName.BROKER_LOGGER_NAME);
     private static final long LOCK_TIMEOUT_MILLIS = 3000;

@@ -120,6 +120,7 @@ public class CommitLog implements Swappable {
         this.commitLogSize = messageStore.getMessageStoreConfig().getMappedFileSizeCommitLog();
     }
 
+    //DefaultMessageStore当中CleanCommitLogService线程进行检测磁盘的容量情况
     public void setFullStorePaths(Set<String> fullStorePaths) {
         this.fullStorePaths = fullStorePaths;
     }
