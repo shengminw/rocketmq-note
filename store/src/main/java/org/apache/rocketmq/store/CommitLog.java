@@ -1830,6 +1830,9 @@ public class CommitLog implements Swappable {
     }
 
     public static class MessageExtEncoder {
+        // 使用ByteBuf，读写指针分离，不用flip()操作这么麻烦，也能进行扩容
+        // 扩容的时候，非池化的版本实际上还是新建了一个对象，然后重新赋给buffer
+        // 扩容的长度：在小于threshold的时候，指数级进行增加，大于threshold的时候，以增加threshold的大小为单位增加
         private ByteBuf byteBuf;
         // The maximum length of the message body.
         private int maxMessageBodySize;

@@ -235,6 +235,7 @@ public class MappedFileQueue implements Swappable {
         MappedFile mappedFile = null;
 
         if (this.allocateMappedFileService != null) {
+            // 内存预分配
             mappedFile = this.allocateMappedFileService.putRequestAndReturnMappedFile(nextFilePath,
                     nextNextFilePath, this.mappedFileSize);
         } else {
