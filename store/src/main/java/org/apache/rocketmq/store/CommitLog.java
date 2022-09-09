@@ -308,8 +308,10 @@ public class CommitLog implements Swappable {
                 int size = dispatchRequest.getMsgSize();
                 // Normal data
                 if (dispatchRequest.isSuccess() && size > 0) {
+                    // 进行这个文件偏移量的移动
                     lastValidMsgPhyOffset = processOffset + mappedFileOffset;
                     mappedFileOffset += size;
+                    // 消息分发，从存储分发消息以构建消费队列、索引和过滤器 （这个步骤是abnormally和normally的一个区别）
                     this.getMessageStore().onCommitLogDispatch(dispatchRequest, doDispatch, mappedFile, true, false);
                 }
                 // Come the end of the file, switch to the next file Since the
@@ -345,16 +347,20 @@ public class CommitLog implements Swappable {
             // In most cases, this value will be overwritten by confirmLog.init.
             // It works if some confirmed messages are lost.
             this.setConfirmOffset(lastValidMsgPhyOffset);
+            // 设置新的刷新位置
             this.mappedFileQueue.setFlushedWhere(processOffset);
+            // 设置新的提交位置
             this.mappedFileQueue.setCommittedWhere(processOffset);
             this.mappedFileQueue.truncateDirtyFiles(processOffset);
 
             // Clear ConsumeQueue redundant data
             if (maxPhyOffsetOfConsumeQueue >= processOffset) {
+                // 清除多余的数据
                 log.warn("maxPhyOffsetOfConsumeQueue({}) >= processOffset({}), truncate dirty logic files", maxPhyOffsetOfConsumeQueue, processOffset);
                 this.defaultMessageStore.truncateDirtyLogicFiles(processOffset);
             }
         } else {
+            // 所有的commitlog都被清除，初次启动的时候
             // Commitlog case files are deleted
             log.warn("The commitlog files are deleted, and delete the consume queue files");
             this.mappedFileQueue.setFlushedWhere(0);
@@ -597,12 +603,14 @@ public class CommitLog implements Swappable {
         boolean checkCRCOnRecover = this.defaultMessageStore.getMessageStoreConfig().isCheckCRCOnRecover();
         boolean checkDupInfo = this.defaultMessageStore.getMessageStoreConfig().isDuplicationEnable();
         final List<MappedFile> mappedFiles = this.mappedFileQueue.getMappedFiles();
+        // 寻找从哪个文件开始进行恢复
         if (!mappedFiles.isEmpty()) {
             // Looking beginning to recover from which file
             int index = mappedFiles.size() - 1;
             MappedFile mappedFile = null;
             for (; index >= 0; index--) {
                 mappedFile = mappedFiles.get(index);
+                //mappedfile中的storetime比checkpoint中的时间小
                 if (this.isMappedFileMatchedRecover(mappedFile)) {
                     log.info("recover from this mapped file " + mappedFile.getFileName());
                     break;
@@ -1788,8 +1796,10 @@ public class CommitLog implements Swappable {
                 if ((totalMsgLen + END_FILE_MIN_BLANK_LENGTH) > maxBlank) {
                     this.msgStoreItemMemory.clear();
                     // 1 TOTALSIZE
+                    // 将后续的长度全部写入至开始的totalsize
                     this.msgStoreItemMemory.putInt(maxBlank);
                     // 2 MAGICCODE
+                    // BLANK_MAGIC_CODE的这个魔法数字也是标识着一个CommitLog的结束
                     this.msgStoreItemMemory.putInt(CommitLog.BLANK_MAGIC_CODE);
                     // 3 The remaining space may be any value
                     //ignore previous read

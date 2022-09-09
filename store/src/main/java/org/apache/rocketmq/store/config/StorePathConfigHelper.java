@@ -39,6 +39,8 @@ public class StorePathConfigHelper {
         return rootDir + File.separator + "checkpoint";
     }
 
+    // abort文件用于标识是否正常退出，abort文件只应该在运行期间存在，正常退出会删除该文件
+    // 因此，存在该文件则说明上次的退出是异常退出
     public static String getAbortFile(final String rootDir) {
         return rootDir + File.separator + "abort";
     }

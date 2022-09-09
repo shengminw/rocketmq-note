@@ -178,6 +178,7 @@ public class ConsumeQueueStore {
     }
 
     public long recover() {
+        // 获取consumeQueueTable当中最大的偏移
         long maxPhysicOffset = -1;
         for (ConcurrentMap<Integer, ConsumeQueueInterface> maps : this.consumeQueueTable.values()) {
             for (ConsumeQueueInterface logic : maps.values()) {

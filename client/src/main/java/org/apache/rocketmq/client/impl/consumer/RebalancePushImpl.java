@@ -174,6 +174,7 @@ public class RebalancePushImpl extends RebalanceImpl {
             case CONSUME_FROM_LAST_OFFSET: {
                 long lastOffset = offsetStore.readOffset(mq, ReadOffsetType.READ_FROM_STORE);
                 if (lastOffset >= 0) {
+                    //等于0的情况下，存在些问题。
                     result = lastOffset;
                 }
                 // First start,no offset
@@ -181,6 +182,7 @@ public class RebalancePushImpl extends RebalanceImpl {
                     if (mq.getTopic().startsWith(MixAll.RETRY_GROUP_TOPIC_PREFIX)) {
                         result = 0L;
                     } else {
+                        // 当没有获取到之前存在的偏移量的时候，获取最大偏移量
                         try {
                             result = this.mQClientFactory.getMQAdminImpl().maxOffset(mq);
                         } catch (MQClientException e) {

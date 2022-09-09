@@ -280,7 +280,7 @@ public class ConsumerManageProcessor implements NettyRequestProcessor {
         if (rewriteResult != null) {
             return rewriteResult;
         }
-
+        // 在offsetTable中进行查询，如果存在这个消费组之前的消费进度，则获取，否则返回-1
         long offset =
             this.brokerController.getConsumerOffsetManager().queryOffset(
                 requestHeader.getConsumerGroup(), requestHeader.getTopic(), requestHeader.getQueueId());
@@ -290,6 +290,8 @@ public class ConsumerManageProcessor implements NettyRequestProcessor {
             response.setCode(ResponseCode.SUCCESS);
             response.setRemark(null);
         } else {
+            // 获取这个topic的这个queueId下，consumequeue的最小偏移
+            // -1的情况应该是由于创建失败所导致ConsumeQueueInterface创建失败所导致的
             long minOffset =
                 this.brokerController.getMessageStore().getMinOffsetInQueue(requestHeader.getTopic(),
                     requestHeader.getQueueId());

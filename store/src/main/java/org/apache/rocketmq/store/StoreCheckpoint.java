@@ -33,9 +33,9 @@ public class StoreCheckpoint {
     private final RandomAccessFile randomAccessFile;
     private final FileChannel fileChannel;
     private final MappedByteBuffer mappedByteBuffer;
-    private volatile long physicMsgTimestamp = 0;
-    private volatile long logicsMsgTimestamp = 0;
-    private volatile long indexMsgTimestamp = 0;
+    private volatile long physicMsgTimestamp = 0; // 刷盘点commitLog最新一条记录的存储时间
+    private volatile long logicsMsgTimestamp = 0; // 刷盘点ConsumeQueue最新一条记录的存储时间
+    private volatile long indexMsgTimestamp = 0; // 刷盘点最近一个已经写完的index的最后一条记录时间
     private volatile long masterFlushedOffset = 0;
 
     public StoreCheckpoint(final String scpPath) throws IOException {
